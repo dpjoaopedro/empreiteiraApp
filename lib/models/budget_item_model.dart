@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 
-class BudgetItem {
+class BudgetItemModel {
   final String id;
   final String budgetId;
   final String title;
 
-  BudgetItem({
+  BudgetItemModel({
     this.id,
     @required this.budgetId,
     @required this.title,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class ModalYesNo extends StatelessWidget {
+class ModalYesNoWidget extends StatelessWidget {
   final String title;
   final String content;
 
-  ModalYesNo({
+  ModalYesNoWidget({
     @required this.title,
     @required this.content,
   });

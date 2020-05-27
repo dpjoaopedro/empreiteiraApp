@@ -4,7 +4,7 @@ import 'package:empreiteiraApp/providers/budget_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BudgetListScreen extends StatelessWidget {
+class BudgetListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<BudgetProvider>(context);
@@ -13,11 +13,11 @@ class BudgetListScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Orçamentos'),
       ),
-      drawer: AppDrawer(),
+      drawer: AppDrawerWidget(),
       body: ListView.builder(
         itemCount: budgets.length,
         itemBuilder: (context, index) {
-          return BudgetListItem(budgets[index]);
+          return BudgetListItemWidget(budgets[index]);
         },
       ),
     );

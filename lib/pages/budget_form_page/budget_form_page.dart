@@ -2,12 +2,12 @@ import 'package:empreiteiraApp/components/modal_yes_no.dart';
 import 'package:empreiteiraApp/models/budget.dart';
 import 'package:flutter/material.dart';
 
-class BudgetFormScreen extends StatefulWidget {
+class BudgetFormPage extends StatefulWidget {
   @override
   _BudgetFormScreenState createState() => _BudgetFormScreenState();
 }
 
-class _BudgetFormScreenState extends State<BudgetFormScreen> {
+class _BudgetFormScreenState extends State<BudgetFormPage> {
   final _formData = Map<String, Object>();
   bool _isEditing = false;
 
@@ -15,7 +15,7 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return ModalYesNo(
+        return ModalYesNoWidget(
             title: 'Atenção', content: 'Deseja salvar o orçamento?');
       },
     ).then((value) {
@@ -27,8 +27,8 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return ModalYesNo(
-            title: 'Atenção', content: 'Deseja deletar o orçamento?');
+        return ModalYesNoWidget(
+            title: 'Atenção', content: 'Deseja excluir o orçamento?');
       },
     ).then((value) {
       //IMPLEMENT
@@ -39,7 +39,7 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_formData.isEmpty) {
-      final budget = ModalRoute.of(context).settings.arguments as Budget;
+      final budget = ModalRoute.of(context).settings.arguments as BudgetModel;
       if (budget == null) { return; }
       _isEditing = true;
       _formData['id'] = budget.id;

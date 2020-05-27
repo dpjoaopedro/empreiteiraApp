@@ -1,12 +1,12 @@
 import 'package:empreiteiraApp/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
-class AppDrawerItem extends StatelessWidget {
+class AppDrawerItemWidget extends StatelessWidget {
   final String title;
   final String appRoute;
   final IconData icon;
 
-  const AppDrawerItem({
+  const AppDrawerItemWidget({
     @required this.title,
     @required this.icon,
     @required this.appRoute,

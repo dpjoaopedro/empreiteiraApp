@@ -3,9 +3,9 @@ import 'package:empreiteiraApp/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class BudgetListItem extends StatelessWidget {
-  final Budget budget;
-  BudgetListItem(this.budget);
+class BudgetListItemWidget extends StatelessWidget {
+  final BudgetModel budget;
+  BudgetListItemWidget(this.budget);
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:empreiteiraApp/components/app_drawer_item.dart';
 import 'package:empreiteiraApp/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -13,7 +13,7 @@ class AppDrawer extends StatelessWidget {
             automaticallyImplyLeading: false,
           ),
           Divider(),
-          AppDrawerItem(title: 'Orçamentos', icon: Icons.attach_money, appRoute: AppRoutes.HOME),
+          AppDrawerItemWidget(title: 'Orçamentos', icon: Icons.attach_money, appRoute: AppRoutes.HOME),
         ],
       ),
     );

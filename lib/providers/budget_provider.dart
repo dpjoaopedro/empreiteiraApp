@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 
 class BudgetProvider with ChangeNotifier {
 
-  List<Budget> _budgets = dummyData;
+  List<BudgetModel> _budgets = dummyData;
 
-  List<Budget> get budgets => [..._budgets];
+  List<BudgetModel> get budgets => [..._budgets];
 
 }
