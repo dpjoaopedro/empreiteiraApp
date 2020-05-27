@@ -4,7 +4,7 @@ import 'package:empreiteiraApp/providers/budget_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BudgetScreen extends StatelessWidget {
+class BudgetListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<BudgetProvider>(context);

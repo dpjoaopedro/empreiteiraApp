@@ -1,3 +1,4 @@
+import 'package:empreiteiraApp/components/app_drawer_item.dart';
 import 'package:empreiteiraApp/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
@@ -12,16 +13,10 @@ class AppDrawer extends StatelessWidget {
             automaticallyImplyLeading: false,
           ),
           Divider(),
-          ListTile(
-            leading: Icon(Icons.attach_money),
-            title: Text('Orçamentos'),
-            onTap: () {
-              Navigator.of(context).popAndPushNamed(AppRoutes.HOME);
-            },
-          ),
-          Divider(),
+          AppDrawerItem(title: 'Orçamentos', icon: Icons.attach_money, appRoute: AppRoutes.HOME),
         ],
       ),
     );
   }
 }
+

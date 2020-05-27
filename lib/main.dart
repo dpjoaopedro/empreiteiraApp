@@ -1,5 +1,6 @@
 import 'package:empreiteiraApp/providers/budget_provider.dart';
-import 'package:empreiteiraApp/screens/budget_screen.dart';
+import 'package:empreiteiraApp/screens/budget_form_screen.dart';
+import 'package:empreiteiraApp/screens/budget_list_screen.dart';
 import 'package:empreiteiraApp/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         routes: {
-          AppRoutes.HOME: (ctx) => BudgetScreen(),
+          AppRoutes.HOME: (ctx) => BudgetListScreen(),
+          AppRoutes.BUDGET: (ctx) => BudgetFormScreen(),
         },
       ),
     );
