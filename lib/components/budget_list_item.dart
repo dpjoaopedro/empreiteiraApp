@@ -1,4 +1,5 @@
-import 'package:empreiteiraApp/models/budget.dart';
+
+import 'package:empreiteiraApp/models/budget_model.dart';
 import 'package:empreiteiraApp/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
