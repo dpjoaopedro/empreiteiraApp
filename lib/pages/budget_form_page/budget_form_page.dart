@@ -1,5 +1,5 @@
-import 'package:empreiteiraApp/components/modal_yes_no.dart';
 import 'package:empreiteiraApp/models/budget_model.dart';
+import 'package:empreiteiraApp/shared/components/modal_yes_no/modal_yes_no.dart';
 import 'package:flutter/material.dart';
 
 class BudgetFormPage extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:empreiteiraApp/components/app_drawer_item.dart';
+import 'package:empreiteiraApp/shared/components/drawer/app_drawer_item.dart';
 import 'package:empreiteiraApp/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 

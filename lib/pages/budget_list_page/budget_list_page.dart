@@ -1,6 +1,6 @@
-import 'package:empreiteiraApp/components/app_drawer.dart';
-import 'package:empreiteiraApp/components/budget_list_item.dart';
+import 'package:empreiteiraApp/pages/budget_list_page/components/budget_list_item.dart';
 import 'package:empreiteiraApp/providers/budget_provider.dart';
+import 'package:empreiteiraApp/shared/components/drawer/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
