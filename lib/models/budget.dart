@@ -1,4 +1,5 @@
 import 'package:empreiteiraApp/models/budget_item.dart';
+import 'package:empreiteiraApp/models/client.dart';
 import 'package:empreiteiraApp/models/payment_item.dart';
 import 'package:flutter/foundation.dart';
 
@@ -7,6 +8,7 @@ class Budget {
   final String title;
   final double price;
   final DateTime date;
+  final Client client;
   final List<BudgetItem> items;
   final List<PaymentItem> payments;
 
@@ -15,6 +17,7 @@ class Budget {
     @required this.title,
     @required this.price,
     @required this.date,
+    @required this.client,
     @required this.items,
     @required this.payments,
   });

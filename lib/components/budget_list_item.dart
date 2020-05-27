@@ -10,7 +10,7 @@ class BudgetListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Container(
-          width: 80, child: FittedBox(child: Text('R\$ ${budget.price}'))),
+          width: 80, child: FittedBox(child: Text('R\$ ${budget.price.toStringAsFixed(2)}'))),
       title: Text(budget.title, overflow: TextOverflow.clip),
       subtitle: Text(DateFormat('dd/MM/yyyy').format(budget.date)),
       onTap: () => {},
