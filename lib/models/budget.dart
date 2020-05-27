@@ -6,6 +6,7 @@ class Budget {
   final String id;
   final String title;
   final double price;
+  final DateTime date;
   final List<BudgetItem> items;
   final List<PaymentItem> payments;
 
@@ -13,6 +14,7 @@ class Budget {
     this.id,
     @required this.title,
     @required this.price,
+    @required this.date,
     @required this.items,
     @required this.payments,
   });
