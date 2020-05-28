@@ -272,23 +272,30 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                       height: 50,
                     ),
                     Container(
-                      height: 300,
+                      height: 350,
                       child: ListView.builder(
                           itemCount: budget.items.length,
                           itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    String.fromCharCode(0x2022) + '  ',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  Text(
-                                    budget.items[index].title,
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
+                            return Card(
+                              elevation: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      String.fromCharCode(0x2022) + '  ',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        budget.items[index].title,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           }),
@@ -337,23 +344,32 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                       height: 50,
                     ),
                     Container(
-                      height: 300,
+                      height: 350,
                       child: ListView.builder(
                           itemCount: budget.payments.length,
                           itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    String.fromCharCode(0x2022) + '  ',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  Text(
-                                    budget.payments[index].description,
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
+                            return Card(
+                              elevation: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      String.fromCharCode(0x2022) + '  ',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        budget.payments[index].description,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           }),
