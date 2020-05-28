@@ -417,13 +417,14 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                             child: Text('Adicionar'),
                             onPressed: () {
                               setState(() {
-                                budget.payments.add(
-                                  (PaymentItemModel(
-                                      date: DateTime.now(),
-                                      id: Random().nextDouble().toString(),
-                                      description:
-                                          _budgetPaymentController.text)),
-                                );
+                                if (_budgetPaymentController.text.isNotEmpty)
+                                  budget.payments.add(
+                                    (PaymentItemModel(
+                                        date: DateTime.now(),
+                                        id: Random().nextDouble().toString(),
+                                        description:
+                                            _budgetPaymentController.text)),
+                                  );
                                 _budgetPaymentController.text = '';
                               });
                             },
