@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:empreiteiraApp/models/budget_item_model.dart';
 import 'package:empreiteiraApp/models/budget_model.dart';
 import 'package:empreiteiraApp/models/client_model.dart';
 import 'package:empreiteiraApp/models/payment_item_model.dart';
+import 'package:empreiteiraApp/providers/budget_provider.dart';
 import 'package:empreiteiraApp/shared/components/modal_yes_no/modal_yes_no.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'components/budget_floating_buttons.dart';
 
@@ -20,19 +24,35 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
   final _paymentFocusNode = FocusNode();
   final _formData = Map<String, Object>();
   final _form = GlobalKey<FormState>();
+  final _budgetServiceController = TextEditingController();
+  final _budgetPaymentController = TextEditingController();
   BudgetFormStatus status = BudgetFormStatus.description;
+  BudgetModel budget = BudgetModel(
+      title: '',
+      price: 0,
+      date: DateTime.now(),
+      client: new ClientModel(name: '', cod: ''),
+      items: new List<BudgetItemModel>(),
+      payments: new List<PaymentItemModel>());
 
   bool _isEditing = false;
 
-  void _saveBudget() {
+  void _saveBudget(BudgetModel budget) {
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (ctx) {
         return ModalYesNoWidget(
             title: 'Atenção', content: 'Deseja salvar o orçamento?');
       },
     ).then((value) {
-      //IMPLEMENT
+      if (value) {
+        var isValid = _form.currentState.validate();
+        if (!isValid) return;
+        _form.currentState.save();
+        var provider = Provider.of<BudgetProvider>(context, listen: false);
+        provider.addBudget(budget);
+        Navigator.of(context).pop();
+      }
     });
   }
 
@@ -44,7 +64,11 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
             title: 'Atenção', content: 'Deseja excluir o orçamento?');
       },
     ).then((value) {
-      //IMPLEMENT
+      if (value) {
+        var provider = Provider.of<BudgetProvider>(context, listen: false);
+        provider.removeBudget(budget.id);
+        Navigator.of(context).pop();
+      }
     });
   }
 
@@ -75,13 +99,20 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
   }
 
   @override
+  void dispose() {
+    _budgetPaymentController.dispose();
+    _budgetServiceController.dispose();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_formData.isEmpty) {
-      final budget = ModalRoute.of(context).settings.arguments as BudgetModel;
-      if (budget == null) {
-        return;
-      }
+      final loadedBudget =
+          ModalRoute.of(context).settings.arguments as BudgetModel;
+      if (loadedBudget == null) return;
+      budget = loadedBudget.copy();
       _isEditing = true;
       _formData['id'] = budget.id;
       _formData['title'] = budget.title;
@@ -93,15 +124,6 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    var budget = ModalRoute.of(context).settings.arguments as BudgetModel;
-    if (budget == null)
-      budget = new BudgetModel(
-          title: '',
-          price: 0,
-          date: DateTime.now(),
-          client: new ClientModel(name: '', cod: ''),
-          items: new List<BudgetItemModel>(),
-          payments: new List<PaymentItemModel>());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -109,7 +131,7 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: _saveBudget,
+            onPressed: () => _saveBudget(budget),
           ),
           if (_isEditing)
             IconButton(
@@ -119,7 +141,7 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15.0),
         child: Form(
           key: _form,
           child: Column(
@@ -131,16 +153,17 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                       children: <Widget>[
                         Flexible(
                           child: TextFormField(
-                            initialValue: _formData['title'],
+                            initialValue: budget.title,
                             decoration: InputDecoration(
                               labelText: 'Título',
                             ),
                             textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (_) {
+                            onChanged: (value) => budget.title = value,
+                            onFieldSubmitted: (value) {
                               FocusScope.of(context)
                                   .requestFocus(_priceFocusNode);
                             },
-                            onSaved: (value) => _formData['title'] = value,
+                            onSaved: (value) => budget.title = value,
                             validator: (value) {
                               bool isEmpty = value.trim().isEmpty;
                               bool isInvalid = value.length < 3;
@@ -157,9 +180,11 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                         SizedBox(
                           width: 100,
                           child: TextFormField(
-                            initialValue: _formData['price'] == null
+                            initialValue: budget.price == null
                                 ? ''
-                                : _formData['price'].toString(),
+                                : budget.price.toString(),
+                            onChanged: (value) => budget.price =
+                                double.tryParse(value.replaceAll(',', '.')),
                             focusNode: _priceFocusNode,
                             decoration: InputDecoration(
                               labelText: 'Preço',
@@ -168,8 +193,8 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                               FocusScope.of(context)
                                   .requestFocus(_clientFocusNode);
                             },
-                            onSaved: (value) =>
-                                _formData['price'] = double.parse(value),
+                            onSaved: (value) => budget.price =
+                                double.tryParse(value.replaceAll(',', '.')),
                             textInputAction: TextInputAction.next,
                             keyboardType:
                                 TextInputType.numberWithOptions(decimal: true),
@@ -189,7 +214,8 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                       ],
                     ),
                     TextFormField(
-                      initialValue: _formData['client'],
+                      initialValue: budget.client.name,
+                      onChanged: (value) => budget.client.name = value,
                       decoration: InputDecoration(
                         labelText: 'Cliente',
                       ),
@@ -198,7 +224,7 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                       onFieldSubmitted: (_) {
                         FocusScope.of(context).requestFocus(_codFocusNode);
                       },
-                      onSaved: (value) => _formData['client'] = value,
+                      onSaved: (value) => budget.client.name = value,
                       validator: (value) {
                         bool isEmpty = value.trim().isEmpty;
                         if (isEmpty) {
@@ -208,7 +234,8 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                       },
                     ),
                     TextFormField(
-                      initialValue: _formData['cod'],
+                      initialValue: budget.client.cod,
+                      onChanged: (value) => budget.client.cod = value,
                       decoration: InputDecoration(
                         labelText: 'CPF / CNPJ',
                       ),
@@ -219,7 +246,7 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                           status = BudgetFormStatus.adding_items;
                         });
                       },
-                      onSaved: (value) => _formData['cod'] = value,
+                      onSaved: (value) => budget.client.cod = value,
                       validator: (value) {
                         bool isEmpty = value.trim().isEmpty;
                         if (isEmpty) {
@@ -236,23 +263,22 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                     Row(
                       children: <Widget>[
                         Flexible(
-                          child: TextFormField(
+                          child: TextField(
                             key: UniqueKey(),
-                            initialValue: '',
                             maxLines: 2,
                             focusNode: _serviceFocusNode,
+                            controller: _budgetServiceController,
                             decoration: InputDecoration(
                               labelText: 'Serviço',
                             ),
                             textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (_) {},
-                            onSaved: (value) => {},
-                            validator: (value) {
-                              bool isEmpty = value.trim().isEmpty;
-                              if (isEmpty) {
-                                return 'Informe um serviço';
-                              }
-                              return null;
+                            onSubmitted: (value) {
+                              if (_budgetServiceController.text.isNotEmpty)
+                                setState(() {
+                                  budget.items.add((BudgetItemModel(
+                                      id: Random().nextDouble().toString(),
+                                      title: _budgetServiceController.text)));
+                                });
                             },
                           ),
                         ),
@@ -263,7 +289,14 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                           width: 100,
                           child: FlatButton(
                             child: Text('Adicionar'),
-                            onPressed: () {},
+                            onPressed: () {
+                              if (_budgetServiceController.text.isNotEmpty)
+                                setState(() {
+                                  budget.items.add((BudgetItemModel(
+                                      id: Random().nextDouble().toString(),
+                                      title: _budgetServiceController.text)));
+                                });
+                            },
                           ),
                         )
                       ],
@@ -272,7 +305,7 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                       height: 50,
                     ),
                     Container(
-                      height: 350,
+                      height: 360,
                       child: ListView.builder(
                           itemCount: budget.items.length,
                           itemBuilder: (context, index) {
@@ -294,6 +327,21 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                                         style: TextStyle(fontSize: 16),
                                       ),
                                     ),
+                                    Container(
+                                      height: 15,
+                                      child: FlatButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              budget.items.removeWhere((item) =>
+                                                  item.id ==
+                                                  budget.items[index].id);
+                                            });
+                                          },
+                                          child: Text(
+                                            'Remover',
+                                            style: TextStyle(color: Colors.red),
+                                          )),
+                                    )
                                   ],
                                 ),
                               ),
@@ -308,23 +356,26 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                     Row(
                       children: <Widget>[
                         Flexible(
-                          child: TextFormField(
+                          child: TextField(
                             key: UniqueKey(),
-                            initialValue: '',
                             maxLines: 2,
                             focusNode: _paymentFocusNode,
                             decoration: InputDecoration(
                               labelText: 'Formas de Pagamento',
                             ),
                             textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (_) {},
-                            onSaved: (value) => {},
-                            validator: (value) {
-                              bool isEmpty = value.trim().isEmpty;
-                              if (isEmpty) {
-                                return 'Informe uma forma de pagamento';
-                              }
-                              return null;
+                            controller: _budgetPaymentController,
+                            onSubmitted: (_) {
+                              setState(() {
+                                if (_budgetPaymentController.text.isNotEmpty)
+                                  setState(() {
+                                    budget.payments.add((PaymentItemModel(
+                                        date: DateTime.now(),
+                                        id: Random().nextDouble().toString(),
+                                        description:
+                                            _budgetPaymentController.text)));
+                                  });
+                              });
                             },
                           ),
                         ),
@@ -335,7 +386,15 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                           width: 100,
                           child: FlatButton(
                             child: Text('Adicionar'),
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                budget.payments.add((PaymentItemModel(
+                                    date: DateTime.now(),
+                                    id: Random().nextDouble().toString(),
+                                    description:
+                                        _budgetPaymentController.text)));
+                              });
+                            },
                           ),
                         )
                       ],
@@ -368,6 +427,23 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                                         ),
                                       ),
                                     ),
+                                    Container(
+                                      height: 15,
+                                      child: FlatButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              budget.payments.removeWhere(
+                                                  (payment) =>
+                                                      payment.id ==
+                                                      budget
+                                                          .payments[index].id);
+                                            });
+                                          },
+                                          child: Text(
+                                            'Remover',
+                                            style: TextStyle(color: Colors.red),
+                                          )),
+                                    )
                                   ],
                                 ),
                               ),

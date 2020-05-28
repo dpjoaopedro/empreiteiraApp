@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BudgetListPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final budgets = Provider.of<BudgetProvider>(context).budgets;
@@ -13,7 +14,10 @@ class BudgetListPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Orçamentos'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.add), onPressed: () => Navigator.of(context).pushNamed(AppRoutes.BUDGET))
+          IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.BUDGET))
         ],
       ),
       drawer: AppDrawerWidget(),

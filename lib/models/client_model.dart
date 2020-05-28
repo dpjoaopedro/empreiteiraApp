@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 class ClientModel {
-  final String id;
-  final String name;
-  final String cod;
+  String id;
+  String name;
+  String cod;
 
   ClientModel({
     this.id,

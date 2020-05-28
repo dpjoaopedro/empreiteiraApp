@@ -12,12 +12,12 @@ final dummyData = [
     client: ClientModel(id: '1', cod: '100.899.946-66', name: 'Funalo da Silva'),
     date: DateTime.now(),
     items: [
-      BudgetItemModel(budgetId: '1', title: 'Alvenaria'),
-      BudgetItemModel(budgetId: '1', title: 'Reboco'),
+      BudgetItemModel(id: '1', title: 'Alvenaria'),
+      BudgetItemModel(id: '2', title: 'Reboco'),
     ],
     payments: [
       PaymentItemModel(id: '1', description: 'Entrada - R\$ 1.000,00 para mobilização', date: DateTime.now()),
-      PaymentItemModel(id: '2', description: 'Restante - R\$ 500,00 na entrega total da obraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', date: DateTime.now())
+      PaymentItemModel(id: '2', description: 'Restante - R\$ 500,00 na entrega total da obra', date: DateTime.now())
     ],
   ),
 ];
