@@ -1,4 +1,3 @@
-import 'package:empreiteiraApp/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawerItemWidget extends StatelessWidget {
@@ -17,10 +16,14 @@ class AppDrawerItemWidget extends StatelessWidget {
     return Column(
       children: <Widget>[
         ListTile(
-          leading: Icon(Icons.attach_money),
-          title: Text('Orçamentos'),
+          leading: Icon(icon),
+          title: Text(title),
           onTap: () {
-            Navigator.of(context).popAndPushNamed(AppRoutes.HOME);
+            if (ModalRoute.of(context).settings.name != appRoute) {
+              Navigator.of(context).popAndPushNamed(appRoute);
+            } else {
+              Navigator.of(context).pushReplacementNamed(appRoute);
+             }
           },
         ),
         Divider()

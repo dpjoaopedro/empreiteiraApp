@@ -7,8 +7,7 @@ import 'package:provider/provider.dart';
 class BudgetListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BudgetProvider>(context);
-    final budgets = provider.budgets;
+    final budgets = Provider.of<BudgetProvider>(context).budgets;
     return Scaffold(
       appBar: AppBar(
         title: Text('Orçamentos'),
