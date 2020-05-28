@@ -1,4 +1,7 @@
+import 'package:empreiteiraApp/models/budget_item_model.dart';
 import 'package:empreiteiraApp/models/budget_model.dart';
+import 'package:empreiteiraApp/models/client_model.dart';
+import 'package:empreiteiraApp/models/payment_item_model.dart';
 import 'package:empreiteiraApp/shared/components/modal_yes_no/modal_yes_no.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +16,8 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
   final _clientFocusNode = FocusNode();
   final _priceFocusNode = FocusNode();
   final _codFocusNode = FocusNode();
+  final _serviceFocusNode = FocusNode();
+  final _paymentFocusNode = FocusNode();
   final _formData = Map<String, Object>();
   final _form = GlobalKey<FormState>();
   BudgetFormStatus status = BudgetFormStatus.description;
@@ -88,10 +93,19 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    var budget = ModalRoute.of(context).settings.arguments as BudgetModel;
+    if (budget == null)
+      budget = new BudgetModel(
+          title: '',
+          price: 0,
+          date: DateTime.now(),
+          client: new ClientModel(name: '', cod: ''),
+          items: new List<BudgetItemModel>(),
+          payments: new List<PaymentItemModel>());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Editar/Novo'),
+        title: Text(budget.title != '' ? budget.title : 'Novo Orçamento'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
@@ -216,12 +230,136 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                     ),
                   ],
                 ),
-              Column(
-                children: <Widget>[],
-              ),
-              Column(
-                children: <Widget>[],
-              ),
+              if (status == BudgetFormStatus.adding_items)
+                Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: TextFormField(
+                            key: UniqueKey(),
+                            initialValue: '',
+                            maxLines: 2,
+                            focusNode: _serviceFocusNode,
+                            decoration: InputDecoration(
+                              labelText: 'Serviço',
+                            ),
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) {},
+                            onSaved: (value) => {},
+                            validator: (value) {
+                              bool isEmpty = value.trim().isEmpty;
+                              if (isEmpty) {
+                                return 'Informe um serviço';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: FlatButton(
+                            child: Text('Adicionar'),
+                            onPressed: () {},
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Container(
+                      height: 300,
+                      child: ListView.builder(
+                          itemCount: budget.items.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Text(
+                                    String.fromCharCode(0x2022) + '  ',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  Text(
+                                    budget.items[index].title,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                    ),
+                  ],
+                ),
+              if (status == BudgetFormStatus.adding_payments)
+                Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: TextFormField(
+                            key: UniqueKey(),
+                            initialValue: '',
+                            maxLines: 2,
+                            focusNode: _paymentFocusNode,
+                            decoration: InputDecoration(
+                              labelText: 'Formas de Pagamento',
+                            ),
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) {},
+                            onSaved: (value) => {},
+                            validator: (value) {
+                              bool isEmpty = value.trim().isEmpty;
+                              if (isEmpty) {
+                                return 'Informe uma forma de pagamento';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: FlatButton(
+                            child: Text('Adicionar'),
+                            onPressed: () {},
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Container(
+                      height: 300,
+                      child: ListView.builder(
+                          itemCount: budget.payments.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Text(
+                                    String.fromCharCode(0x2022) + '  ',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  Text(
+                                    budget.payments[index].description,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                    ),
+                  ],
+                ),
               Spacer(),
               BudgetFloatingButtons(status, onNavigateBack, onNavigateNext)
             ],
