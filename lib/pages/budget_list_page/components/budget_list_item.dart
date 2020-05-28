@@ -38,33 +38,48 @@ class BudgetListItemWidget extends StatelessWidget {
     doc.addPage(
       pw.MultiPage(build: (pw.Context context) {
         return <pw.Widget>[
-          pw.Expanded(
-            child: pw.Row(children: <pw.Widget>[
-              pw.Container(
-                width: 300,
-                height: 212.25,
-                child: pw.Image(logo),
-              ),
-              pw.Spacer(),
-              pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.end,
-                  children: <pw.Widget>[
-                    pw.Text('CNPJ:10.253.958/0001-48'),
-                    pw.Text('Insc. Municipal: 720535410'),
-                    pw.Text('Telefone: +55 31 9 9576 8733'),
-                    pw.Text('e-mail: empreiteirapaula@hotmail.com'),
-                  ])
-            ]),
-          ),
-          pw.Spacer(),
-          pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.end,
+          pw.Row(children: <pw.Widget>[
+            // pw.Container(
+            //   width: 250,
+            //   height: 200,
+            //   child: pw.Image(logo),
+            // ),
+            pw.Container(
+              alignment: pw.Alignment.topLeft,
+              height: 72,
+              child: logo != null ? pw.Image(logo) : pw.PdfLogo(),
+            ),
+            pw.Spacer(),
+            pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.end,
+                children: <pw.Widget>[
+                  pw.Text('CNPJ:10.253.958/0001-48'),
+                  pw.Text('Insc. Municipal: 720535410'),
+                  pw.Text('Telefone: +55 31 9 9576 8733'),
+                  pw.Text('e-mail: empreiteirapaula@hotmail.com'),
+                ])
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.end,
               children: <pw.Widget>[
-                pw.Text('Data:' + DateFormat('dd MMM yyyy.').format(budget.date)),
-                pw.SizedBox(height: 25),
-                pw.Text('Orçamento para:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.Text(budget.client.name),
-                pw.Text(budget.client.cod),
+                pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                    children: <pw.Widget>[
+                      pw.Text(
+                        'Data: ' +
+                            DateFormat('dd').format(budget.date) +
+                            ' de ' +
+                            DateFormat('MMM').format(budget.date) +
+                            ' de ' +
+                            DateFormat('yyyy').format(budget.date),
+                      ),
+                      pw.SizedBox(height: 10),
+                      pw.Text('Orçamento para:',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      pw.Text(budget.client.name),
+                      pw.Text(budget.client.cod),
+                    ]),
               ]),
           pw.Header(
               level: 2,
