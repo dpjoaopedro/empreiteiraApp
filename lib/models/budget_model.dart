@@ -8,6 +8,7 @@ class BudgetModel {
    String id;
    String title;
    double price;
+   String materialsAndTools;
    DateTime date;
    ClientModel client;
    List<BudgetItemModel> items;
@@ -17,6 +18,7 @@ class BudgetModel {
     this.id,
     @required this.title,
     @required this.price,
+    @required this.materialsAndTools,
     @required this.date,
     @required this.client,
     @required this.items,
@@ -28,6 +30,7 @@ class BudgetModel {
       id: this.id,
       title: this.title,
       price: this.price,
+      materialsAndTools: this.materialsAndTools,
       date: this.date,
       client: this.client,
       items: [...this.items],

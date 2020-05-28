@@ -9,6 +9,7 @@ final dummyData = [
     id: '1',
     title: 'Orçamento 1',
     price: 1500,
+    materialsAndTools: 'Todos os materiais e ferramentas são de responsabilidade do contratante',
     client: ClientModel(id: '1', cod: '100.899.946-66', name: 'Funalo da Silva'),
     date: DateTime.now(),
     items: [

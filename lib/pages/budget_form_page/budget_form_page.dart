@@ -18,6 +18,7 @@ class BudgetFormPage extends StatefulWidget {
 
 class _BudgetFormScreenState extends State<BudgetFormPage> {
   final _clientFocusNode = FocusNode();
+  final _materialsAndToolsFocusNode = FocusNode();
   final _priceFocusNode = FocusNode();
   final _codFocusNode = FocusNode();
   final _serviceFocusNode = FocusNode();
@@ -29,7 +30,8 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
   BudgetFormStatus status = BudgetFormStatus.description;
   BudgetModel budget = BudgetModel(
       title: '',
-      price: 0,
+      price: 0.00,
+      materialsAndTools: 'Materiais e ferramentas por conta do contratante',
       date: DateTime.now(),
       client: new ClientModel(name: '', cod: ''),
       items: new List<BudgetItemModel>(),
@@ -242,15 +244,37 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                       focusNode: _codFocusNode,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) {
-                        setState(() {
-                          status = BudgetFormStatus.adding_items;
-                        });
+                        FocusScope.of(context)
+                            .requestFocus(_materialsAndToolsFocusNode);
                       },
                       onSaved: (value) => budget.client.cod = value,
                       validator: (value) {
                         bool isEmpty = value.trim().isEmpty;
                         if (isEmpty) {
                           return 'Informe um CPF / CNPJ!';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      initialValue: budget.materialsAndTools,
+                      maxLines: 2,
+                      onChanged: (value) => budget.materialsAndTools = value,
+                      decoration: InputDecoration(
+                        labelText: 'Materiais e Ferramentas',
+                      ),
+                      focusNode: _materialsAndToolsFocusNode,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) {
+                        setState(() {
+                          status = BudgetFormStatus.adding_items;
+                        });
+                      },
+                      onSaved: (value) => budget.client.name = value,
+                      validator: (value) {
+                        bool isEmpty = value.trim().isEmpty;
+                        if (isEmpty) {
+                          return 'Informe os detalhes de material e equipamentos!';
                         }
                         return null;
                       },
@@ -278,6 +302,7 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                                   budget.items.add((BudgetItemModel(
                                       id: Random().nextDouble().toString(),
                                       title: _budgetServiceController.text)));
+                                  _budgetServiceController.text = '';
                                 });
                             },
                           ),
@@ -295,6 +320,7 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                                   budget.items.add((BudgetItemModel(
                                       id: Random().nextDouble().toString(),
                                       title: _budgetServiceController.text)));
+                                  _budgetServiceController.text = '';
                                 });
                             },
                           ),
@@ -369,11 +395,14 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                               setState(() {
                                 if (_budgetPaymentController.text.isNotEmpty)
                                   setState(() {
-                                    budget.payments.add((PaymentItemModel(
-                                        date: DateTime.now(),
-                                        id: Random().nextDouble().toString(),
-                                        description:
-                                            _budgetPaymentController.text)));
+                                    budget.payments.add(
+                                      (PaymentItemModel(
+                                          date: DateTime.now(),
+                                          id: Random().nextDouble().toString(),
+                                          description:
+                                              _budgetPaymentController.text)),
+                                    );
+                                    _budgetPaymentController.text = '';
                                   });
                               });
                             },
@@ -388,11 +417,14 @@ class _BudgetFormScreenState extends State<BudgetFormPage> {
                             child: Text('Adicionar'),
                             onPressed: () {
                               setState(() {
-                                budget.payments.add((PaymentItemModel(
-                                    date: DateTime.now(),
-                                    id: Random().nextDouble().toString(),
-                                    description:
-                                        _budgetPaymentController.text)));
+                                budget.payments.add(
+                                  (PaymentItemModel(
+                                      date: DateTime.now(),
+                                      id: Random().nextDouble().toString(),
+                                      description:
+                                          _budgetPaymentController.text)),
+                                );
+                                _budgetPaymentController.text = '';
                               });
                             },
                           ),
